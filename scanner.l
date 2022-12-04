@@ -5,7 +5,6 @@
 int running = 1;
 int lineNumber = 1;
 int charLength = 1;
-int validString = 1;
 %}
 
 %x COMMENT
