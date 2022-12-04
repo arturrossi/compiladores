@@ -1,4 +1,2 @@
 lex.yy.c
-!*.c
-!*.h
-!*.l
+etapa1
