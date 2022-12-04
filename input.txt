@@ -1,21 +1,4 @@
-cara 1231 
-///10.2 
-"abc"
-'a'
-as
-dsa
-dsada
-dsadaa
-a
-dsadaa
-dsasd
-asd
-asd133
-enquanto43
-4g
-trb
-hgn
-hgn
-$
+se 5.5 >= 5 entaum escreva "5.5 é maior que 5!" senaum "5.5 é menor que 5!";
+///asdasd
+aadada
 \\\
-se "abc" senaum 'a' 10.2,enquanto

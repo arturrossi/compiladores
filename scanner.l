@@ -11,6 +11,7 @@ int validString = 1;
 %x COMMENT
 %x LITERAL_STRING
 %x CHAR_STRING
+%x IDENTIFIER
 
 %%
 cara                                { return KW_CARA; }
@@ -23,11 +24,13 @@ enquanto                            { return KW_ENQUANTO; }
 entrada                             { return KW_ENTRADA; }
 escreva                             { return KW_ESCREVA; }
 retorne                             { return KW_RETORNE; }
-[-;(){}\[\]\=+*/<>&|~]              { return yytext[0]; }
+[-;(){}\[\]=\+*/<>&|~]              { return yytext[0]; }
 "<="                                { return OPERATOR_LE; }
 ">="                                { return OPERATOR_GE; }
 "=="                                { return OPERATOR_EQ; }
 "!="                                { return OPERATOR_DIF; }
+[._][0-9|a-z]*                      { insertNode(yytext, TK_IDENTIFIER); return TK_IDENTIFIER; }
+[a-z]*                              { insertNode(yytext, TK_IDENTIFIER); return TK_IDENTIFIER; }
 [0-9]+                              { insertNode(yytext, LIT_INTEIRO);  return LIT_INTEIRO; }
 [0-9]+.[0-9]+                       { insertNode(yytext, LIT_FLOAT);  return LIT_FLOAT; }
 [, \t]
@@ -47,6 +50,9 @@ retorne                             { return KW_RETORNE; }
 <CHAR_STRING>\'                     { BEGIN(INITIAL); if (charLength == 1) return LIT_CHAR; }
 <CHAR_STRING>([^\\\']{2,}|\\.{2,})  { charLength++; return TOKEN_ERROR; }
 <CHAR_STRING>([^\\\']{1}|\\.{1})    { charLength = 1; insertNode(yytext, LIT_CHAR); }
+
+<IDENTIFIER>[ ]                     { BEGIN(INITIAL); return TK_IDENTIFIER; }
+<IDENTIFIER>([^ ]|\\.)*             { insertNode(yytext, TK_IDENTIFIER); }    
 
 %%
 

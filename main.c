@@ -8,12 +8,12 @@ int main(int argc, char** argv) {
 
     int token;
 
-    initHashTable();
+    initMe();
 
-    while (running) {
+    while (isRunning()) {
         token = yylex();
 
-        if (running == 0) break;
+        if (!isRunning()) break;
 
         switch (token) {
             case KW_INTE:
@@ -70,6 +70,9 @@ int main(int argc, char** argv) {
             case LIT_FLOAT:
                 printf("Found LIT_FLOAT\n");
                 break;
+            case TK_IDENTIFIER:
+                printf("Found TK_IDENTIFIER %c\n", token);
+                break;
             case TOKEN_ERROR:
                 printf("Unexpected token\n");
                 break;
@@ -80,9 +83,15 @@ int main(int argc, char** argv) {
     }
 
     printf("Finished executing main!\n");
-    printf("File has %d lines\n", lineNumber);
+    printf("File has %d lines\n", getLineNumber());
     printHashTable();
 }
+
+void initMe(void) { initHashTable(); }
+
+int getLineNumber(void) { return lineNumber; }
+
+int isRunning(void) { return running; }
 
 int yywrap() {
     running = 0;
