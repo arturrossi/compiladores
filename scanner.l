@@ -5,6 +5,11 @@
 int running = 1;
 int lineNumber = 1;
 int charLength = 1;
+
+int yywrap();
+int isRunning(void);
+int getLineNumber(void);
+void initMe(void);
 %}
 
 %x COMMENT
