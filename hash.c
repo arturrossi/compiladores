@@ -25,7 +25,7 @@ HASH_NODE* findNode(char* text) {
     HASH_NODE* node;
     int address = getHashAddress(text);
 
-    for (node = hashTable[address]; node; node->next) {
+    for (node = hashTable[address]; node; node = node->next) {
         if (strcmp(node->text, text) == 0) {
             return node;
         }

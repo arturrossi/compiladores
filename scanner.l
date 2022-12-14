@@ -62,3 +62,14 @@ retorne                             { return KW_RETORNE; }
 
 #include "main.c"
 #include "hash.c"
+
+void initMe(void) { initHashTable(); }
+
+int getLineNumber(void) { return lineNumber; }
+
+int isRunning(void) { return running; }
+
+int yywrap() {
+    running = 0;
+    return 1;
+}

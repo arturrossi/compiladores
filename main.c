@@ -86,14 +86,3 @@ int main(int argc, char** argv) {
     printf("File has %d lines\n", getLineNumber());
     printHashTable();
 }
-
-void initMe(void) { initHashTable(); }
-
-int getLineNumber(void) { return lineNumber; }
-
-int isRunning(void) { return running; }
-
-int yywrap() {
-    running = 0;
-    return 1;
-}
