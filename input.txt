@@ -1,4 +1,0 @@
-se 5.5 >= 5 entaum escreva "5.5 é maior que 5!" senaum "5.5 é menor que 5!";
-///asdasd
-aadada
-\\\
