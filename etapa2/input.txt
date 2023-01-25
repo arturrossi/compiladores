@@ -1,8 +1,1 @@
-inte teste = 5;
-inte a(inte b cara c) {
-    a = 5;
-    b = a + 5 * 2 + d[4 + ninini * asdasda - tchaka()];
-    c[a * b + c] = 5 + funcao(3 4 (5 * 3 + (a + b))) * funcaoasadsa() + entrada;
-    adadadada = funcao();
-    entaum a[3] = b * 3; se (5 + 3);
-}
+inte teste = 5 + 2;
