@@ -38,19 +38,27 @@ void astPrint(AST* node, int level ) {
 	case AST_SUB:
 		fprintf(stderr, "AST_SUB");
 		break;
+	case AST_MULT:
+		fprintf(stderr, "AST_MULT");
+		break;
+	case AST_DIV:
+		fprintf(stderr, "AST_DIV");
+		break;
+	case AST_LESS:
+		fprintf(stderr, "AST_LESS");
+		break;
+	case AST_GREAT:
+		fprintf(stderr, "AST_GREAT");
+		break;
 	default:
 		fprintf(stderr, "AST_UNKNOWN");
 		break;
    }
 
-   if (node->symbol !=0)
-   	fprintf(stderr, ", %s\n", node->symbol->text);
+   if (node->symbol !=0) fprintf(stderr, ", %s\n", node->symbol->text);
+   else fprintf(stderr, ", 0\n");
 
 	for(i=0; i < MAX_SONS; i++) {
 		astPrint(node->son[i], level+1);
 	}
-	for (i = 0; i < level; i++) {
-	   fprintf(stderr, "  ");
-	}
-	fprintf(stderr, ")\n");
 }

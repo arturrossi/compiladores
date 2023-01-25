@@ -31,6 +31,9 @@
 %token OPERATOR_DIF     
 
 %type<ast> expr;
+%type<ast> lcmd;
+%type<ast> cmd;
+%type<ast> expr_escreva;
 
 %token<symbol> TK_IDENTIFIER    
 
@@ -74,22 +77,22 @@ decresto: '=' expr ';'                          { astPrint($2, 0); }
 bloco: '{' lcmd '}'
     ;
 
-lcmd: cmd lcmd
-    | ';'
-    |
+lcmd: cmd lcmd                                 { $$ = astCreate(AST_LCMD, 0, $1, 0, 0, 0); }
+    | ';'                                 
+    |                                          { $$ = $0; }
     ;
 
-cmd: TK_IDENTIFIER '=' expr ';'                 
-    | TK_IDENTIFIER '[' expr ']' '=' expr ';'
-    | KW_ESCREVA expr_escreva ';'
-    | KW_RETORNE expr ';'
-    | KW_ENTAUM cmd KW_SE '(' expr ')'
+cmd: TK_IDENTIFIER '=' expr ';'                 { $$ = astCreate(AST_ATTR, $1, $3, 0, 0, 0); }
+    | TK_IDENTIFIER '[' expr ']' '=' expr ';'   { $$ = astCreate(AST_ATTR, $3, $6, 0, 0, 0); }
+    | KW_ESCREVA expr_escreva ';'               { $$ = astCreate(AST_ESCREVA, $2, 0, 0, 0, 0); }
+    | KW_RETORNE expr ';'                       { $$ = astCreate(AST_RETORNE, $2, 0, 0, 0, 0); }
+    | KW_ENTAUM cmd KW_SE '(' expr ')'          
     | KW_ENTAUM KW_SENAUM cmd KW_SE '(' expr ')'
     | cmd KW_ENQUANTO '(' expr ')'
     ;
 
-expr_escreva: LIT_INTEIRO expr_escreva
-    |
+expr_escreva: LIT_INTEIRO expr_escreva         { $$ = astCreate(AST_SYMBOL, $1, 0, 0, 0, 0); }
+    |                                          { $$ = $0; }
     ;
 
 expr: LIT_INTEIRO                               { $$ = astCreate(AST_SYMBOL, $1, 0, 0, 0, 0); }
@@ -101,10 +104,10 @@ expr: LIT_INTEIRO                               { $$ = astCreate(AST_SYMBOL, $1,
     | KW_ENTRADA                                 { $$ = astCreate(AST_SYMBOL, $1, 0, 0, 0, 0); } 
     | expr '+' expr                              { $$ = astCreate(AST_ADD, 0, $1, $3, 0, 0); }
     | expr '-' expr                              { $$ = astCreate(AST_SUB, 0, $1, $3, 0, 0); }
-    | expr '*' expr
-    | expr '/' expr
-    | expr '<' expr
-    | expr '>' expr
+    | expr '*' expr                              { $$ = astCreate(AST_MULT, 0, $1, $3, 0, 0); }
+    | expr '/' expr                              { $$ = astCreate(AST_DIV, 0, $1, $3, 0, 0); }
+    | expr '<' expr                              { $$ = astCreate(AST_LESS, 0, $1, $3, 0, 0); }
+    | expr '>' expr                              { $$ = astCreate(AST_GREAT, 0, $1, $3, 0, 0); }
     | expr OPERATOR_LE expr
     | expr OPERATOR_GE expr
     | expr OPERATOR_EQ expr
@@ -115,7 +118,7 @@ expr: LIT_INTEIRO                               { $$ = astCreate(AST_SYMBOL, $1,
     | '(' expr ')'                                { $$ = $2; }
     ;
 
-func_val: expr func_val
+func_val: expr func_val       { astPrint($1, 0); }
     |
     ;
 

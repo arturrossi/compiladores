@@ -8,6 +8,14 @@
 #define AST_SYMBOL 1
 #define AST_ADD 2
 #define AST_SUB 3
+#define AST_MULT 4
+#define AST_DIV 5
+#define AST_GREAT 6
+#define AST_LESS 7
+#define AST_LCMD 8
+#define AST_ATTR 9
+#define AST_ESCREVA 10
+#define AST_RETORNE 11
 
 typedef struct astnode
 {
