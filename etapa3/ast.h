@@ -16,6 +16,27 @@
 #define AST_ATTR 9
 #define AST_ESCREVA 10
 #define AST_RETORNE 11
+#define AST_EXPRL 12
+#define AST_ATTRINTE 13
+#define AST_ATTRCARA 14
+#define AST_ATTRREAL 15
+#define AST_LATTR 16
+#define AST_FUNC_PARAM 17
+#define AST_ATTR_VECTOR 18
+#define AST_LVAL 19
+#define AST_LE 20
+#define AST_GE 21
+#define AST_EQ 22
+#define AST_DIF 23
+#define AST_AND 24
+#define AST_OR 25
+#define AST_NOT 26
+#define AST_VECTOR_IND 27
+#define AST_FUNC_CALL 28
+#define AST_SE 29
+#define AST_ENTAUM 30
+#define AST_ENQUANTO 31
+#define AST_SENAUM 32
 
 typedef struct astnode
 {

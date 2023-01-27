@@ -36,7 +36,7 @@ retorne                             { return KW_RETORNE; }
 "!="                                { return OPERATOR_DIF; }
 [a-z._]+[a-z0-9._]*                 { yylval.symbol = insertNode(yytext, TK_IDENTIFIER); return TK_IDENTIFIER; }
 [0-9]+                              { yylval.symbol = insertNode(yytext, LIT_INTEIRO); return LIT_INTEIRO; }
-[0-9]+.[0-9]+                       { insertNode(yytext, LIT_FLOAT);  return LIT_FLOAT; }
+[0-9]+.[0-9]+                       { yylval.symbol = insertNode(yytext, LIT_FLOAT);  return LIT_FLOAT; }
 [, \t]
 \"                                  { BEGIN(LITERAL_STRING); }   
 \'                                  { BEGIN(CHAR_STRING); }                   
@@ -49,11 +49,11 @@ retorne                             { return KW_RETORNE; }
 <COMMENT>.      
 
 <LITERAL_STRING>\"                  { BEGIN(INITIAL); return LIT_STRING; }
-<LITERAL_STRING>([^\\\"]|\\.)*      { insertNode(yytext, LIT_STRING); }
+<LITERAL_STRING>([^\\\"]|\\.)*      { yylval.symbol = insertNode(yytext, LIT_STRING); }
 
 <CHAR_STRING>\'                     { BEGIN(INITIAL); if (charLength == 1) return LIT_CHAR; }
 <CHAR_STRING>([^\\\']{2}|\\.{2})  { charLength++; return TOKEN_ERROR; }
-<CHAR_STRING>([^\\\']{1}|\\.{1})    { charLength = 1; insertNode(yytext, LIT_CHAR); }
+<CHAR_STRING>([^\\\']{1}|\\.{1})    { charLength = 1; yylval.symbol = insertNode(yytext, LIT_CHAR); }
 
 <IDENTIFIER>[ ]                     { BEGIN(INITIAL); return TK_IDENTIFIER; }
 <IDENTIFIER>([^ ]|\\.)*             { insertNode(yytext, TK_IDENTIFIER); }    

@@ -17,7 +17,7 @@ AST *astCreate(int type, HASH_NODE *symbol, AST* s0, AST* s1, AST* s2, AST* s3) 
 	return newnode;
 }
 
-void astPrint(AST* node, int level ) {
+void astPrint(AST* node, int level) {
    if(!node) return;
 
    int i;
@@ -49,6 +49,78 @@ void astPrint(AST* node, int level ) {
 		break;
 	case AST_GREAT:
 		fprintf(stderr, "AST_GREAT");
+		break;
+	case AST_LATTR:
+		fprintf(stderr, "AST_LATTR");
+		break;
+	case AST_ATTRINTE:
+		fprintf(stderr, "AST_ATTRINTE");
+		break;
+	case AST_ATTRREAL:
+		fprintf(stderr, "AST_ATTRREAL");
+		break;
+	case AST_ATTRCARA:
+		fprintf(stderr, "AST_ATTRCARA");
+		break;
+	case AST_ATTR:
+		fprintf(stderr, "AST_ATTR");
+		break;
+	case AST_FUNC_PARAM: 
+		fprintf(stderr, "AST_FUNC_PARAM");
+		break;
+	case AST_ATTR_VECTOR:
+		fprintf(stderr, "AST_ATTR_VECTOR");
+		break;
+	case AST_LVAL:
+		fprintf(stderr, "AST_LVAL");
+		break;
+	case AST_LE:
+		fprintf(stderr, "AST_LE");
+		break;
+	case AST_GE:
+		fprintf(stderr, "AST_GE");
+		break;
+	case AST_EQ:
+		fprintf(stderr, "AST_EQ");
+		break;
+	case AST_DIF:
+		fprintf(stderr, "AST_DIF");
+		break;
+	case AST_AND:
+		fprintf(stderr, "AST_AND");
+		break;
+	case AST_OR:
+		fprintf(stderr, "AST_OR");
+		break;
+	case AST_NOT:
+		fprintf(stderr, "AST_NOT");
+		break;
+	case AST_LCMD:
+		fprintf(stderr, "AST_LCMD");
+		break;
+	case AST_VECTOR_IND:
+		fprintf(stderr, "AST_VECTOR_IND");
+		break;
+	case AST_FUNC_CALL:
+		fprintf(stderr, "AST_FUNC_CALL");
+		break;
+	case AST_EXPRL:
+		fprintf(stderr, "AST_EXPRL");
+		break;
+	case AST_SE:
+		fprintf(stderr, "AST_SE");
+		break;
+	case AST_ENTAUM:
+		fprintf(stderr, "AST_ENTAUM");
+		break;
+	case AST_ENQUANTO:
+		fprintf(stderr, "AST_ENQUANTO");
+		break;
+	case AST_SENAUM:
+		fprintf(stderr, "AST_SENAUM");
+		break;
+	case AST_RETORNE:
+		fprintf(stderr, "AST_RETORNE");
 		break;
 	default:
 		fprintf(stderr, "AST_UNKNOWN");
