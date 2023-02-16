@@ -39,6 +39,7 @@
 %type<ast> decl;
 %type<ast> resto;
 %type<ast> func_param;
+%type<ast> func_param_l;
 %type<ast> val_lista;
 %type<ast> bloco;
 %type<ast> func_val;
@@ -63,7 +64,7 @@
 
 %%
 
-programa: decl                              {  astPrint($1, 0); }
+programa: decl                              {  astPrint($1, 0); astDecompile($1); }
     ;
     
 decl: dec resto                             { $$ = astCreate(AST_LATTR, 0, $1, $2, 0, 0); }    
@@ -80,12 +81,12 @@ resto: dec resto                            { $$ = astCreate(AST_LATTR, 0, $1, $
     ;
 
 decresto: '=' expr ';'                       { $$ = astCreate(AST_ATTR, 0, $2, 0, 0, 0); }
-    | '(' func_param ')' bloco               { $$ = astCreate(AST_FUNC_PARAM, 0, $2, $4, 0, 0); }
+    | '(' func_param_l ')' bloco               { $$ = astCreate(AST_FUNC_PARAM, 0, $2, $4, 0, 0); }
     | '[' LIT_INTEIRO ']' ';'                { $$ = astCreate(AST_ATTR_VECTOR, $2, 0, 0, 0, 0); }
     | '[' LIT_INTEIRO ']' '=' val_lista ';'  { $$ = astCreate(AST_ATTR_VECTOR, $2, $5, 0, 0, 0); }
     ;
 
-bloco: '{' lcmd '}'                           { $$ = $2;}           
+bloco: '{' lcmd '}'                           { $$ = astCreate(AST_BLOCO, 0, $2, 0, 0, 0); }           
     ;
 
 lcmd: cmd lcmd                                 { $$ = astCreate(AST_LCMD, 0, $1, $2, 0, 0); }
@@ -94,7 +95,7 @@ lcmd: cmd lcmd                                 { $$ = astCreate(AST_LCMD, 0, $1,
     ;
 
 cmd: TK_IDENTIFIER '=' expr ';'                 { $$ = astCreate(AST_ATTR, $1, $3, 0, 0, 0); }
-    | TK_IDENTIFIER '[' expr ']' '=' expr ';'   { $$ = astCreate(AST_VECTOR_IND, $1, $3, astCreate(AST_ATTR, $1, $6, 0, 0, 0), 0, 0); }
+    | TK_IDENTIFIER '[' expr ']' '=' expr ';'   { $$ = astCreate(AST_VECTOR_IND, $1, $3, astCreate(AST_ATTR, 0, $6, 0, 0, 0), 0, 0); }
     | KW_ESCREVA expr_escreva ';'               { $$ = astCreate(AST_ESCREVA, 0, $2, 0, 0, 0); }
     | KW_RETORNE expr ';'                       { $$ = astCreate(AST_RETORNE, 0, $2, 0, 0, 0); }
     | KW_ENTAUM cmd KW_SE '(' expr ')'           { $$ = astCreate(AST_ENTAUM, 0, $2, astCreate(AST_SE, 0, $5, 0, 0, 0), 0, 0); }
@@ -112,7 +113,7 @@ expr: LIT_INTEIRO                               { $$ = astCreate(AST_SYMBOL, $1,
     | TK_IDENTIFIER '[' expr ']'                { $$ = astCreate(AST_VECTOR_IND, $1, $3, 0, 0, 0); } 
     | TK_IDENTIFIER                             { $$ = astCreate(AST_SYMBOL, $1, 0, 0, 0, 0); }
     | TK_IDENTIFIER '(' func_val ')'            { $$ = astCreate(AST_FUNC_CALL, $1, $3, 0, 0, 0); } 
-    | KW_ENTRADA                                 { $$ = astCreate(AST_SYMBOL, 0, 0, 0, 0, 0); } 
+    | KW_ENTRADA                                 { $$ = astCreate(AST_SYMBOL, $1, 0, 0, 0, 0); } 
     | expr '+' expr                              { $$ = astCreate(AST_ADD, 0, $1, $3, 0, 0); }
     | expr '-' expr                              { $$ = astCreate(AST_SUB, 0, $1, $3, 0, 0); }
     | expr '*' expr                              { $$ = astCreate(AST_MULT, 0, $1, $3, 0, 0); }
@@ -133,20 +134,24 @@ func_val: expr func_val                         { $$ = astCreate(AST_EXPRL, 0, $
     |                                           { $$ = 0; }
     ;
 
-func_param: KW_INTE TK_IDENTIFIER func_param    { $$ = astCreate(AST_ATTRINTE, $2, $3, 0, 0, 0); }
-    | KW_CARA TK_IDENTIFIER func_param          { $$ = astCreate(AST_ATTRCARA, $2, $3, 0, 0, 0); }
-    | KW_REAL TK_IDENTIFIER func_param          { $$ = astCreate(AST_ATTRREAL, $2, $3, 0, 0, 0); }
+func_param_l: func_param func_param_l           { $$ = astCreate(AST_FUNC_PARAML, 0, $1, $2, 0, 0); }
     |                                           { $$ = 0; }
     ;
 
-val_lista: val val_lista                    { $$ = astCreate(AST_LVAL, $1, $2, 0, 0, 0); }
+func_param: KW_INTE TK_IDENTIFIER func_param    { $$ = astCreate(AST_DECL_INT, $2, $3, 0, 0, 0); }
+    | KW_CARA TK_IDENTIFIER func_param          { $$ = astCreate(AST_DECL_CARA, $2, $3, 0, 0, 0); }
+    | KW_REAL TK_IDENTIFIER func_param          { $$ = astCreate(AST_DECL_REAL, $2, $3, 0, 0, 0); }
     |                                           { $$ = 0; }
     ;
 
-val: LIT_CHAR                                   { $$ = $1; fprintf(stderr, "eu1? %s\n", $1->text);  }
-    | LIT_FLOAT                                 { $$ = $1; fprintf(stderr, "eu2? %s\n", $1->text); }
-    | LIT_INTEIRO                               { $$ = $1;fprintf(stderr, "eu3? %s\n", $1->text);  }
-    | LIT_STRING                                { $$ = $1;fprintf(stderr, "eu4? %s\n", $1->text);  }
+val_lista: val val_lista                        { $$ = astCreate(AST_LVAL, $1, $2, 0, 0, 0); }
+    |                                           { $$ = 0; }
+    ;
+
+val: LIT_CHAR                                   { $$ = $1; }
+    | LIT_FLOAT                                 { $$ = $1; }
+    | LIT_INTEIRO                               { $$ = $1; }
+    | LIT_STRING                                { $$ = $1; }
     ;
 
 %%

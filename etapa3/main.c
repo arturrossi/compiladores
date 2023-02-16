@@ -8,7 +8,7 @@ int getLineNumber();
 
 int main(int argc, char** argv) {
     if (argc < 2) {
-        fprintf(stderr, "Usage: ./executable filename\n");
+        fprintf(stderr, "Usage: ./executable filename output\n");
         exit(1);
     }
 

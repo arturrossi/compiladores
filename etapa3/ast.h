@@ -37,17 +37,21 @@
 #define AST_ENTAUM 30
 #define AST_ENQUANTO 31
 #define AST_SENAUM 32
+#define AST_BLOCO 33
+#define AST_FUNC_PARAML 34
+#define AST_DECL_INT 35
+#define AST_DECL_CARA 36
+#define AST_DECL_REAL 37
 
 typedef struct astnode
 {
     int type;
     HASH_NODE *symbol;
     struct astnode *son[MAX_SONS];
-
 } AST;
 
 AST *astCreate(int type, HASH_NODE *symbol, AST* s0, AST* s1, AST* s2, AST* s3);
 void astPrint(AST *node, int level);
-
+void astDecompile(AST *node);
 
 #endif
