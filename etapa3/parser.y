@@ -5,6 +5,7 @@
     int yyerror();
     int getLineNumber();
     int yylex();
+    extern FILE *yyout;
 %}
 
 %union 
@@ -64,7 +65,7 @@
 
 %%
 
-programa: decl                              {  astPrint($1, 0); astDecompile($1); }
+programa: decl                              {  astPrint($1, 0); astDecompile($1, yyout); }
     ;
     
 decl: dec resto                             { $$ = astCreate(AST_LATTR, 0, $1, $2, 0, 0); }    

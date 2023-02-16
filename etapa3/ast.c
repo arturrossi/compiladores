@@ -150,199 +150,199 @@ void astPrint(AST* node, int level) {
 	}
 }
 
-void astDecompile(AST* node) {
+void astDecompile(AST* node, FILE* file) {
 	if(!node) return;
 
 	int i = 0;
 
    switch(node->type) {
     case AST_SYMBOL: 
-		fprintf(stderr, "%s", node->symbol->text);
+		fprintf(file, "%s", node->symbol->text);
 		break;
 	case AST_ADD:
-		astDecompile(node->son[0]);
-		fprintf(stderr, " + ");
-		astDecompile(node->son[1]);
+		astDecompile(node->son[0], file);
+		fprintf(file, " + ");
+		astDecompile(node->son[1], file);
 		i = 3;
 		break;
 	case AST_SUB:
-		astDecompile(node->son[0]);
-		fprintf(stderr, " - ");
-		astDecompile(node->son[1]);
+		astDecompile(node->son[0], file);
+		fprintf(file, " - ");
+		astDecompile(node->son[1], file);
 		i = 3;		
 		break;
 	case AST_MULT:
-		astDecompile(node->son[0]);
-		fprintf(stderr, " * ");
-		astDecompile(node->son[1]);
+		astDecompile(node->son[0], file);
+		fprintf(file, " * ");
+		astDecompile(node->son[1], file);
 		i = 3;		
 		break;
 	case AST_DIV:
-		astDecompile(node->son[0]);
-		fprintf(stderr, " / ");
-		astDecompile(node->son[1]);
+		astDecompile(node->son[0], file);
+		fprintf(file, " / ");
+		astDecompile(node->son[1], file);
 		i = 3;		break;
 	case AST_LESS:
-		fprintf(stderr, "AST_LESS");
+		fprintf(file, "AST_LESS");
 		break;
 	case AST_GREAT:
-		fprintf(stderr, "AST_GREAT");
+		fprintf(file, "AST_GREAT");
 		break;
 	case AST_LATTR:
 		break;
 	case AST_ATTRINTE:
-		fprintf(stderr,  "inte %s", node->symbol->text);
-		astDecompile(node->son[0]);
+		fprintf(file,  "inte %s", node->symbol->text);
+		astDecompile(node->son[0], file);
 		i = 3;
 		break;
 	case AST_ATTRREAL:
-		fprintf(stderr, "real %s",  node->symbol->text);
+		fprintf(file, "real %s",  node->symbol->text);
 		break;
 	case AST_ATTRCARA:
-		fprintf(stderr, "cara %s", node->symbol->text);
+		fprintf(file, "cara %s", node->symbol->text);
 		break;
 	case AST_ATTR:
 		if (node->symbol != 0) {
-			fprintf(stderr, "%s = ", node->symbol->text);
-			astDecompile(node->son[0]);
-			fprintf(stderr, ";");
+			fprintf(file, "%s = ", node->symbol->text);
+			astDecompile(node->son[0], file);
+			fprintf(file, ";");
 			i=4;
 		} else {
-			fprintf(stderr, " = ");
-			astDecompile(node->son[0]);
-			fprintf(stderr, ";");
+			fprintf(file, " = ");
+			astDecompile(node->son[0], file);
+			fprintf(file, ";");
 			i=4;
 		}
 		break;
 	case AST_FUNC_PARAML:
-		astDecompile(node->son[0]);
-		fprintf(stderr, " ");
+		astDecompile(node->son[0], file);
+		fprintf(file, " ");
 		i=1;
 		break;
 	case AST_FUNC_PARAM: 
-		fprintf(stderr, "(");
-		astDecompile(node->son[0]);
-		fprintf(stderr, ")");
-		astDecompile(node->son[1]);
+		fprintf(file, "(");
+		astDecompile(node->son[0], file);
+		fprintf(file, ")");
+		astDecompile(node->son[1], file);
 		i=4;
 		break;
 	case AST_ATTR_VECTOR:
-		fprintf(stderr, "[%s]", node->symbol->text);
+		fprintf(file, "[%s]", node->symbol->text);
 		if (!node->son[0]) {
-			fprintf(stderr, ";");
+			fprintf(file, ";");
 			i=4;
 		} else {
-			fprintf(stderr, " =");
-			astDecompile(node->son[0]);
+			fprintf(file, " =");
+			astDecompile(node->son[0], file);
 			i=4;
-			fprintf(stderr, ";");
+			fprintf(file, ";");
 		}
 		break;
 	case AST_LVAL:
-		fprintf(stderr, " %s", node->symbol->text);
-		astDecompile(node->son[0]);
+		fprintf(file, " %s", node->symbol->text);
+		astDecompile(node->son[0], file);
 		break;	
 	case AST_DECL_INT:
-		fprintf(stderr, " inte %s", node->symbol->text);
-		astDecompile(node->son[0]);
+		fprintf(file, " inte %s", node->symbol->text);
+		astDecompile(node->son[0], file);
 		i=4;
 		break;
 	case AST_DECL_CARA:
-		fprintf(stderr, " cara %s", node->symbol->text);
-		astDecompile(node->son[0]);
+		fprintf(file, " cara %s", node->symbol->text);
+		astDecompile(node->son[0], file);
 		i=4;
 		break;
 	case AST_DECL_REAL:
-		fprintf(stderr, " real %s", node->symbol->text);
-		astDecompile(node->son[0]);
+		fprintf(file, " real %s", node->symbol->text);
+		astDecompile(node->son[0], file);
 		i=4;
 		break;	
 	case AST_LE:
-		astDecompile(node->son[0]);
-		fprintf(stderr, " <= ");
-		astDecompile(node->son[1]);
+		astDecompile(node->son[0], file);
+		fprintf(file, " <= ");
+		astDecompile(node->son[1], file);
 		i=4;
 		break;
 	case AST_GE:
-		astDecompile(node->son[0]);
-		fprintf(stderr, " >= ");
-		astDecompile(node->son[1]);
+		astDecompile(node->son[0], file);
+		fprintf(file, " >= ");
+		astDecompile(node->son[1], file);
 		i=4;		
 		break;
 	case AST_EQ:
-		astDecompile(node->son[0]);
-		fprintf(stderr, " == ");
-		astDecompile(node->son[1]);
+		astDecompile(node->son[0], file);
+		fprintf(file, " == ");
+		astDecompile(node->son[1], file);
 		i=4;
 		break;
 	case AST_DIF:
-		astDecompile(node->son[0]);
-		fprintf(stderr, " != ");
-		astDecompile(node->son[1]);
+		astDecompile(node->son[0], file);
+		fprintf(file, " != ");
+		astDecompile(node->son[1], file);
 		i=4;
 		break;
 	case AST_AND:
-		astDecompile(node->son[0]);
-		fprintf(stderr, " & ");
-		astDecompile(node->son[1]);
+		astDecompile(node->son[0], file);
+		fprintf(file, " & ");
+		astDecompile(node->son[1], file);
 		i=4;		
 		break;
 	case AST_OR:
-		astDecompile(node->son[0]);
-		fprintf(stderr, " | ");
-		astDecompile(node->son[1]);
+		astDecompile(node->son[0], file);
+		fprintf(file, " | ");
+		astDecompile(node->son[1], file);
 		i=4;	
 		break;
 	case AST_NOT:
-		astDecompile(node->son[0]);
-		fprintf(stderr, " ~ ");
-		astDecompile(node->son[1]);
+		astDecompile(node->son[0], file);
+		fprintf(file, " ~ ");
+		astDecompile(node->son[1], file);
 		i=4;
 		break;
 	case AST_LCMD:
-		fprintf(stderr, "");
+		fprintf(file, "");
 		break;
 	case AST_VECTOR_IND:
-		fprintf(stderr, "%s[", node->symbol->text);
-		astDecompile(node->son[0]);
-		fprintf(stderr, "]");
+		fprintf(file, "%s[", node->symbol->text);
+		astDecompile(node->son[0], file);
+		fprintf(file, "]");
 		i = 1;
 		break;
 	case AST_FUNC_CALL:
-		fprintf(stderr, "%s(", node->symbol->text);
-		astDecompile(node->son[0]);
-		fprintf(stderr, ")");
+		fprintf(file, "%s(", node->symbol->text);
+		astDecompile(node->son[0], file);
+		fprintf(file, ")");
 		i=4;
 		break;
 	case AST_EXPRL:
-		astDecompile(node->son[0]);
-		fprintf(stderr, " ");
-		astDecompile(node->son[1]);
+		astDecompile(node->son[0], file);
+		fprintf(file, " ");
+		astDecompile(node->son[1], file);
 		i=4;
 		break;
 	case AST_SE:
-		fprintf(stderr, "se ");
-		astDecompile(node->son[0]);
+		fprintf(file, "se ");
+		astDecompile(node->son[0], file);
 		i = 4;
-		fprintf(stderr, " ");
+		fprintf(file, " ");
 		break;
 	case AST_ENTAUM:
-		fprintf(stderr, "entaum ");
+		fprintf(file, "entaum ");
 		break;
 	case AST_ENQUANTO:
-		fprintf(stderr, "enquanto ");
+		fprintf(file, "enquanto ");
 		break;
 	case AST_SENAUM:
-		fprintf(stderr, "senaum ");
+		fprintf(file, "senaum ");
 		break;
 	case AST_RETORNE:
-		fprintf(stderr, "retorne ");
+		fprintf(file, "retorne ");
 		break;
 	case AST_BLOCO:
-		fprintf(stderr, "{");
-		astDecompile(node->son[0]);
+		fprintf(file, "{");
+		astDecompile(node->son[0], file);
 		i = 4;
-		fprintf(stderr, "}");
+		fprintf(file, "}");
 		break;		
 	default:
 		fprintf(stderr, "AST_UNKNOWN");
@@ -354,6 +354,6 @@ void astDecompile(AST* node) {
    	// else fprintf(stderr, " ");
 
 	for(i=i; i < MAX_SONS; i++) {
-		astDecompile(node->son[i]);
+		astDecompile(node->son[i], file);
 	}
 }
